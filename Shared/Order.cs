@@ -1,4 +1,5 @@
-﻿namespace WorkerRole1 {
+﻿namespace Shared
+{
     using System;
     using System.Collections.Generic;
     using System.Linq;
