@@ -9,6 +9,6 @@
         public string Name { get; set; }
         public string DefaultSubscriptionName { get; set; }
         
-        public
+
     }
 }

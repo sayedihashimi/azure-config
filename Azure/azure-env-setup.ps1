@@ -1,5 +1,11 @@
-﻿
-# you can se to
+﻿param(
+    [Parameter(Mandatory = $true)]
+    [string]$sourceEnvFile,
+
+    [Parameter(Mandatory = $true)]
+    [string]$destEnvFile
+)
+
 
 #TODO: make into a script parameter
 $azurePowershellModulePath = "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
@@ -9,8 +15,8 @@ Import-Module $azurePowershellModulePath
 $VerbosePreference = "Continue"
 
 # TODO: This should be passed in as a parameter
-$sourceEnvironmentFile = 'C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\Environments\azureenv.xml'
-$destEnvironmentFile = 'C:\temp\azure\azureenv.xml'
+#$sourceEnvFile = 'C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\azureenv.xml'
+#$destEnvFile = 'C:\temp\azure\azureenv.xml'
 $defaultSubName = 'local'
 
 # TODO: GAP: We cannot get the SQL Database password, need to update the APIs to expose it or
@@ -24,9 +30,9 @@ $dbServerRootDomain = ".database.windows.net,1433"
 ############ Begin script
 
 # copy the source file to the destination
-Copy-Item -LiteralPath $sourceEnvironmentFile -Destination $destEnvironmentFile
+Copy-Item -LiteralPath $sourceEnvFile -Destination $destEnvFile
 
-[xml]$configXml = Get-Content $destEnvironmentFile
+[xml]$configXml = Get-Content $destEnvFile
 $currentAzureSubBefore = Get-AzureSubscription -Current
 
 function WriteDebugMessage(){
@@ -129,8 +135,8 @@ foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
 }
 
 # save the new XML file to the destination
-"Saving config file with the updated contents at [{0}]" -f $destEnvironmentFile | WriteDebugMessage
-$configXml.Save($destEnvironmentFile)
+"Saving config file with the updated contents at [{0}]" -f $destEnvFile | WriteDebugMessage
+$configXml.Save($destEnvFile)
 
 # restore the original azure subscription
 if($currentAzureSubBefore){
