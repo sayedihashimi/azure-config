@@ -13,9 +13,13 @@ $sourceEnvironmentFile = 'C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAn
 $destEnvironmentFile = 'C:\temp\azure\azureenv.xml'
 $defaultSubName = 'local'
 
+# TODO: GAP: We cannot get the SQL Database password, need to update the APIs to expose it or
+#            or some better runtime support for getting the password somehow
+$dbPassword = 'p@ssw0rd'
 # constants which change script behavior
 $storageUsePrimaryKey = $true
 $storageDefaultProtocol = 'https'
+$dbServerRootDomain = ".database.windows.net,1433"
 
 ############ Begin script
 
@@ -27,7 +31,20 @@ $currentAzureSubBefore = Get-AzureSubscription -Current
 
 function WriteDebugMessage(){
     param([string] $input)
-   "writing: $input" | Write-Verbose
+   "$input" | Write-Verbose
+}
+
+function Get-SQLAzureDatabaseConnectionString
+{
+    Param(
+        [String]$DatabaseServerName,
+        [String]$DatabaseName,
+        [String]$UserName,
+        [String]$Password
+    )
+
+    Return "Server=tcp:{0}{1};Database={2};User ID={3}@{0};Password={4};Trusted_Connection=False;Encrypt=True;Connection Timeout=30;" -f
+        $DatabaseServerName,$dbServerRootDomain, $DatabaseName, $UserName, $Password
 }
 
 function GetStorageConnectionString() {
@@ -90,6 +107,15 @@ foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
             # add the ConnectionString attribute to the element
             $node.SetAttribute('ConnectionString',$conString)
         }
+        elseif($node.LocalName -eq 'SqlDatabase'){
+            $dbServer = (Get-AzureSqlDatabaseServer | Where-Object {$_.ServerName -eq $node.ServerName })
+            $dbName = $node.Name
+
+            $dbConString = (Get-SQLAzureDatabaseConnectionString -DatabaseServerName $dbServer.ServerName -DatabaseName $node.Name -UserName $dbServer.AdministratorLogin -Password $dbPassword)
+            "DB connection string: [{0}]" -f $dbConString | WriteDebugMessage
+
+            $node.SetAttribute("ConnectionString",$dbConString)
+        }
     }
     else{
         "Skipped updating ConnectionString because the element has alredy defined the attribute" | WriteDebugMessage
@@ -104,3 +130,5 @@ $configXml.Save($destEnvironmentFile)
 if($currentAzureSubBefore){
     Set-AzureSubscription -SubscriptionName $currentAzureSubBefore.SubscriptionName
 }
+# TODO: Remove this later
+$VerbosePreference = "SilentlyContinue"

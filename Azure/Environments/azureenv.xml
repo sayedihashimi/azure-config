@@ -15,6 +15,7 @@
     <StorageAccount Name="hummingbird" />
     <StorageAccount Name="sayedtest" SubscriptionName="prod"/>
     <StorageAccount Name="sayedtest2" SubscriptionName="prod" ConnectionString="should not be modified"/>
+    <SqlDatabase Name="sayeddb" ServerName="uqqo42757g" />
   </Environment>
 
   <Environment Name="local" DefaultSubscriptionName="local">
