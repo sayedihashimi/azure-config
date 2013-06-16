@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -337,6 +339,9 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
-
-  <Import Project="C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\azure.targets"/>
+  <PropertyGroup>
+    <AzureConfigTargets Condition=" '$()'=='' ">$(MSBuildProjectDirectory)\..\Azure\azure.targets</AzureConfigTargets>
+  </PropertyGroup>
+  <Import Project="$(AzureConfigTargets)" Condition="Exists('$(AzureConfigTargets)')" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>
