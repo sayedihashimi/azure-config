@@ -5,7 +5,7 @@
       <Import moduleName="Diagnostics" />
     </Imports>
     <ConfigurationSettings>
-      <Setting name="Storage.Hummingbird" />
+      <Setting name="hummingbird" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

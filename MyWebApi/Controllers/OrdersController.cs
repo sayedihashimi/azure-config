@@ -44,7 +44,7 @@
 
             Trace.TraceInformation("AddOrderToQueue called");
 
-            string storageConnectionString = ConfigurationManager.ConnectionStrings["Storage.Hummingbird"].ConnectionString;
+            string storageConnectionString = ConfigurationManager.ConnectionStrings["hummingbird"].ConnectionString;
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
             var ordersQueue = queueClient.GetQueueReference("orders");
@@ -59,7 +59,7 @@
             Trace.TraceInformation("    Order added to the queue", orderJson);
         }
 
-        private void AddOrderNew(Order order) {
+        private void AddOrderToQueue2(Order order) {
             // pseudo code
             // CloudStorageAccount storageAccount = CloudStorageAccount.
         }
