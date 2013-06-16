@@ -14,7 +14,6 @@ Import-Module $azurePowershellModulePath
 # set this after importing the module
 $VerbosePreference = "Continue"
 
-# TODO: This should be passed in as a parameter
 #$sourceEnvFile = 'C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\azureenv.xml'
 #$destEnvFile = 'C:\temp\azure\azureenv.xml'
 $defaultSubName = 'local'

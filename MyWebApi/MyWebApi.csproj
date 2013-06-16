@@ -337,4 +337,6 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
+
+  <Import Project="C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\azure.targets"/>
 </Project>
