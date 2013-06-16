@@ -10,16 +10,14 @@
     <!--<Subscription Name="test"
                    Id="4BB7DC43-77F9-4079-8173-14D792B48E0C" />-->
   </Subscriptions>
-
+  
   <Environment Name="prod" DefaultSubscriptionName="prod">
     <StorageAccount Name="hummingbird" />
     <StorageAccount Name="sayedtest" SubscriptionName="prod"/>
     <StorageAccount Name="sayedtest2" SubscriptionName="prod" ConnectionString="should not be modified"/>
   </Environment>
-  
-  <Environment Name="local" DefaultSubscriptionName="prod">
+
+  <Environment Name="local" DefaultSubscriptionName="local">
     <StorageAccount Name="hummingbird" />
-    
-  </Environment>
-  
+  </Environment>  
 </AzureConfiguration>

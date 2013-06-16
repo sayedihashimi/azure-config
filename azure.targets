@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Demo" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <PowerShellExe Condition=" '$(PowerShellExe)'=='' ">$(WINDIR)\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+    <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\azure-env-setup.ps1</ScriptLocation>
+  </PropertyGroup>
+  
+  <Target Name="Demo">
+    <PropertyGroup>
+      <_Cmd>$(PowerShellExe) -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; {$(ScriptLocation) }&quot;</_Cmd>
+    </PropertyGroup>
+
+    <Message Text="PS Command: [$(_Cmd)]" Importance="high" />
+
+    <Exec Command="$(_Cmd)"/>
+  </Target>
+  
+</Project>

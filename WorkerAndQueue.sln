@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{444EFA97
 		Azure\Environments\azureenv.xml = Azure\Environments\azureenv.xml
 	EndProjectSection
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "WindowsAzure1", "WindowsAzure1\WindowsAzure1.ccproj", "{5DAF6A47-39AB-4BF9-80C4-250F505E8E29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{45BF5EB3-E667-4BB0-A47A-86889C37D834}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45BF5EB3-E667-4BB0-A47A-86889C37D834}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45BF5EB3-E667-4BB0-A47A-86889C37D834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DAF6A47-39AB-4BF9-80C4-250F505E8E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DAF6A47-39AB-4BF9-80C4-250F505E8E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DAF6A47-39AB-4BF9-80C4-250F505E8E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DAF6A47-39AB-4BF9-80C4-250F505E8E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

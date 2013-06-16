@@ -4,5 +4,8 @@
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <ConfigurationSettings>
+      <Setting name="Setting1" />
+    </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
