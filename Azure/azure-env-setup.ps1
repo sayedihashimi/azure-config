@@ -85,21 +85,27 @@ function GetStorageConnectionString() {
 
     return $conString
 }
+function GetSubscriptionValueForNode(){
+    param([System.Xml.XmlElement]$xmlNode)
+    # does the node have  a SubscriptionName attribute?
+    $subName = $node.SubscriptionName
+    if(!$subName) {          
+        $subName = $node.ParentNode.DefaultSubscriptionName
+    }
+
+    if(!$subName){
+        $subName = $defaultSubName
+    }
+
+    return $subName
+}
 
 # Find all StorageAccount elements under Environments and then populate the connection string
 foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
+    $subName = GetSubscriptionValueForNode -xmlNode $node
+    
     # see if the node has a ConnectionString element if it does skip over it
-    if(!$node.ConnectionString){
-        # does the node have  a SubscriptionName attribute?
-        $subName = $node.SubscriptionName
-        if(!$subName) {          
-            $subName = $node.ParentNode.DefaultSubscriptionName
-        }
-
-        if(!$subName){
-            $subName = $defaultSubName
-        }
-
+    if(!$node.ConnectionString){                     
         # get the connection string for the asset
         $conString = $null
         if($node.LocalName -eq 'StorageAccount'){

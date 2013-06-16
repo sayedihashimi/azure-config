@@ -3,7 +3,8 @@
 
   <PropertyGroup>
     <PowerShellExe Condition=" '$(PowerShellExe)'=='' ">$(WINDIR)\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
-    <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\azure-env-setup.ps1</ScriptLocation>
+    <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">$(MSBuildThisFileDirectory)azure-env-setup.ps1</ScriptLocation>
+    <SourceAzureConfig Condition=" '$(SourceAzureConfig)'=='' "></SourceAzureConfig>
   </PropertyGroup>
   
   <Target Name="Demo">
@@ -15,5 +16,14 @@
 
     <Exec Command="$(_Cmd)"/>
   </Target>
-  
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="UpdateAzureInfoInBin">
+    
+  </Target>
 </Project>

@@ -20,5 +20,6 @@
 
   <Environment Name="local" DefaultSubscriptionName="local">
     <StorageAccount Name="hummingbird" />
+    <SqlDatabase Name="sayeddb" ServerName="uqqo42757g" />
   </Environment>  
 </AzureConfiguration>
