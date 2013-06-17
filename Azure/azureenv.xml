@@ -16,10 +16,13 @@
     <StorageAccount Name="sayedtest" SubscriptionName="prod"/>
     <StorageAccount Name="sayedtest2" SubscriptionName="prod" ConnectionString="should not be modified"/>
     <SqlDatabase Name="sayeddb" ServerName="uqqo42757g" />
+    <SqlDatabase Name="sayeddbtest" ServerName="uqqo42757g" />
   </Environment>
 
   <Environment Name="local" DefaultSubscriptionName="local">
     <StorageAccount Name="hummingbird" />
-    <SqlDatabase Name="sayeddb" ServerName="uqqo42757g" />
+    <SqlDatabase Name="sayeddb" />
+    <SqlDatabase Name="sayeddbtest" ServerName="(LocalDb)\v12.0" />
+    <SqlDatabase Name="sayeddbtest2" ServerName="ddddddddddddddddddddddd" />
   </Environment>  
 </AzureConfiguration>

@@ -25,6 +25,8 @@
             }
 
             this.AzureConfig = new AzureConfig(azureConfigPath, azureEnv);
+
+            string conString = this.AzureConfig.GetSqlDatabaseConnectionString("sayeddb");
         }
         // PUT api/orders/5
         public void Put([FromBody]Order order) {
@@ -78,6 +80,5 @@
             ordersQueue.AddMessage(message);
             Trace.TraceInformation("    Order added to the queue", orderJson);
         }
-
     }
 }

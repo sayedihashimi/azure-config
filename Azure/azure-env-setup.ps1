@@ -14,9 +14,8 @@ Import-Module $azurePowershellModulePath
 # set this after importing the module
 $VerbosePreference = "Continue"
 
-#$sourceEnvFile = 'C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\azureenv.xml'
-#$destEnvFile = 'C:\temp\azure\azureenv.xml'
 $defaultSubName = 'local'
+$defaultLocalDbServerName = '(LocalDb)\v11.0'
 
 # TODO: GAP: We cannot get the SQL Database password, need to update the APIs to expose it or
 #            or some better runtime support for getting the password somehow
@@ -41,15 +40,29 @@ function WriteDebugMessage(){
 
 function Get-SQLAzureDatabaseConnectionString
 {
-    Param(
+    param(
         [String]$DatabaseServerName,
         [String]$DatabaseName,
         [String]$UserName,
         [String]$Password
     )
+    $conString = $null
 
-    Return "Server=tcp:{0}{1};Database={2};User ID={3}@{0};Password={4};Trusted_Connection=False;Encrypt=True;Connection Timeout=30;" -f
-        $DatabaseServerName,$dbServerRootDomain, $DatabaseName, $UserName, $Password
+    if($subscriptionName -ne 'local'){
+        $conString = ("Server=tcp:{0}{1};Database={2};User ID={3}@{0};Password={4};Trusted_Connection=False;Encrypt=True;Connection Timeout=30;" -f
+            $DatabaseServerName,$dbServerRootDomain, $DatabaseName, $UserName, $Password)
+    }
+    else{
+        if(!($DatabaseServerName)){
+            $DatabaseServerName = $defaultLocalDbServerName
+        }
+
+        $conString = ("Data Source={0};Initial Catalog={1};Integrated Security=SSPI" -f $DatabaseServerName, $DatabaseName)
+    }
+
+    return $conString
+
+# Data Source=(LocalDb)\v11.0;Initial Catalog=;Integrated Security=SSPI
 }
 
 function GetStorageConnectionString() {
