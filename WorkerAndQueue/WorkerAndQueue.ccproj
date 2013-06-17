@@ -37,6 +37,14 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MyWebApi\MyWebApi.csproj">
+      <Name>MyWebApi</Name>
+      <Project>{75a4603f-604a-4267-9fb0-ab1ee76c6c1f}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>MyWebApi</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
     <ProjectReference Include="..\WorkerRole1\WorkerRole1.csproj">
       <Name>WorkerRole1</Name>
       <Project>{692c4706-c4bc-4b44-b4b7-f21ff0c15525}</Project>
@@ -47,9 +55,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="MyWebApiContent\" />
     <Folder Include="WorkerRole1Content\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MyWebApiContent\diagnostics.wadcfg">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="WorkerRole1Content\diagnostics.wadcfg">
       <SubType>Content</SubType>
     </Content>

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Azure.cs" />
+    <Compile Include="AzureConfig.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
