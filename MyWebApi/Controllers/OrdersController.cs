@@ -23,21 +23,11 @@
 
             this.AzureConfig = new AzureConfig();
 
+            var result = this.AzureConfig.GetStorageAcctNames();
+
             string conString = this.AzureConfig.GetSqlDatabaseConnectionString("sayeddb");
 
-            //string azureEnv = ConfigurationManager.AppSettings["azure:env"];
 
-            //string azureConfigPath = HttpContext.Current.Server.MapPath(@"~/bin/azureenv.xml");
-            //if (!File.Exists(azureConfigPath)) {
-            //    throw new FileNotFoundException("Azure config file not found at expected location", azureConfigPath);
-            //}
-
-            //this.AzureConfig = new AzureConfig(azureConfigPath, azureEnv);
-
-            //string conString = this.AzureConfig.GetSqlDatabaseConnectionString("sayeddb");
-
-            //AzureConfig test = new AzureConfig();
-            //string conString2 = test.GetSqlDatabaseConnectionString("sayeddb");
         }
 
         // PUT api/orders/5

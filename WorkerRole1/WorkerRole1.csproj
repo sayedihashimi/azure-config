@@ -78,7 +78,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shared\AzureHelpers.csproj">
+    <ProjectReference Include="..\AzureHelpers\AzureHelpers.csproj">
       <Project>{45bf5eb3-e667-4bb0-a47a-86889c37d834}</Project>
       <Name>AzureHelpers</Name>
     </ProjectReference>

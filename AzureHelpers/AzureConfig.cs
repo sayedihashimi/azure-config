@@ -36,7 +36,7 @@
                     "Configuration file not found", configXmlPath);
             }
 
-            this.DefaultEnvironmentName = envName;
+            this.DefaultEnvironmentName = "local";
             this.LoadConfig(configXmlPath);
         }
 
@@ -56,6 +56,23 @@
             ConfigXml = XDocument.Load(configXmlPath);
         }
 
+        public List<string> GetStorageAcctNames() {
+            List<string> result = null;
+
+            var connectionStringResult = from n in ConfigXml.Root.Elements("Environment")
+                                          where n.Attribute("Name") != null
+                                          where n.Attribute("Name").Value != null
+                                          where string.Compare(DefaultEnvironmentName, n.Attribute("Name").Value) == 0
+                                          from storage in n.Elements("StorageAccount")
+                                          where storage.Attribute("Name") != null && storage.Attribute("Name").Value != null
+                                          select storage.Attribute("Name").Value;
+            if (connectionStringResult != null) {
+                result = connectionStringResult.ToList();
+            }
+
+            return result;
+        }
+
         public string GetStorageAccountConnectionString(string storageAccountName) {
             return this.GetStorageAccountConnectionString(storageAccountName, this.DefaultEnvironmentName);
         }
@@ -73,7 +90,7 @@
                                           from storage in n.Elements("StorageAccount")
                                           where storage.Attribute("Name") != null && storage.Attribute("Name").Value != null
                                           where string.Compare(storage.Attribute("Name").Value, storageAccountName) == 0
-                                          select storage).SingleOrDefault();
+                                          select storage).FirstOrDefault();
                                       //select storage.Attribute("ConnectionString").Value;
             
             if (connectionStringResult != null) {

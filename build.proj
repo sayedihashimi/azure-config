@@ -45,7 +45,7 @@
 
     <!--<NuGetRootItems Include="$(SourceRoot)readme.txt"/>-->
 
-    <ProjectsToBuild Include="$(SourceRoot)Shared\Shared.csproj" />
+    <ProjectsToBuild Include="$(SourceRoot)AzureHelpers\AzureHelpers.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
