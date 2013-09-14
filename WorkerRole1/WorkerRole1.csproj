@@ -78,9 +78,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj">
+    <ProjectReference Include="..\Shared\AzureHelpers.csproj">
       <Project>{45bf5eb3-e667-4bb0-a47a-86889c37d834}</Project>
-      <Name>Shared</Name>
+      <Name>AzureHelpers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

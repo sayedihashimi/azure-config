@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerRole1", "WorkerRole1\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWebApi", "MyWebApi\MyWebApi.csproj", "{75A4603F-604A-4267-9FB0-AB1EE76C6C1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{45BF5EB3-E667-4BB0-A47A-86889C37D834}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureHelpers", "Shared\AzureHelpers.csproj", "{45BF5EB3-E667-4BB0-A47A-86889C37D834}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{444EFA97-BD9E-43E5-91D0-47B4D893D9B8}"
 	ProjectSection(SolutionItems) = preProject
