@@ -22,10 +22,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C9C040
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Environments", "Environments", "{E73F1F48-204B-4188-B75D-CCCE159910F4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Env", "Env", "{E73F1F48-204B-4188-B75D-CCCE159910F4}"
 	ProjectSection(SolutionItems) = preProject
-		Azure\Environments\local.xml = Azure\Environments\local.xml
-		Azure\Environments\prod.xml = Azure\Environments\prod.xml
+		Azure\env\local.xml = Azure\env\local.xml
+		Azure\env\prod.xml = Azure\env\prod.xml
 	EndProjectSection
 EndProject
 Global

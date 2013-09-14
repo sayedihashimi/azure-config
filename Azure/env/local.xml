@@ -11,11 +11,11 @@
                    Id="4BB7DC43-77F9-4079-8173-14D792B48E0C" />
   </Subscriptions>
   
-  <Environment Name="local" DefaultSubscriptionName="local">
+  <Environment Name="local" DefaultSubscriptionName="prod">
     <StorageAccount Name="hummingbird3" />
     <StorageAccount Name="sayedtest" SubscriptionName="prod"/>
     <StorageAccount Name="sayedtest2" SubscriptionName="prod" ConnectionString="(value here should not be modified)"/>
-    <SqlDatabase Name="sayeddb" ServerName="uqqo42757g" />
-    <SqlDatabase Name="sayeddbtest" ServerName="uqqo42757g" />
+    <SqlDatabase Name="sayeddb" ServerName="w9cjkvd9ay" />
+    <SqlDatabase Name="sayeddbtest" ServerName="w9cjkvd9ay" />
   </Environment>
 </AzureConfiguration>

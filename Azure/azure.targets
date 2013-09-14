@@ -4,15 +4,16 @@
   <PropertyGroup>
     <PowerShellExe Condition=" '$(PowerShellExe)'=='' ">$(WINDIR)\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
     <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">$(MSBuildThisFileDirectory)azure-env-setup.ps1</ScriptLocation>
-    <SourceAzureConfig Condition=" '$(SourceAzureConfig)'=='' ">$(MSBuildThisFileDirectory)azureenv.xml</SourceAzureConfig>
-    <DestAzureConfig Condition=" ''=='' ">$(OutDir)azureenv.xml</DestAzureConfig>
+    <ServerEnvName Condition=" '$(ServerEnvName)'=='' ">local</ServerEnvName>
+    <SourceAzureConfig Condition=" '$(SourceAzureConfig)'=='' ">$(MSBuildThisFileDirectory)\env\$(ServerEnvName).xml</SourceAzureConfig>
+    <DestAzureConfig Condition=" ''=='' ">$(OutDir)$(ServerEnvName).xml</DestAzureConfig>
     <!-- TODO: This should be updated to false later -->
     <CreateNonExistingObjects Condition=" ''=='' ">true</CreateNonExistingObjects>
   </PropertyGroup>
   
   <Target Name="Demo">
     <PropertyGroup>
-      <_Cmd>$(PowerShellExe) -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; {$(ScriptLocation) </_Cmd>
+      <_Cmd>$(PowerShellExe) -noprofile -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; {$(ScriptLocation) </_Cmd>
       <_Cmd>$(_Cmd) -sourceEnvFile 'C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\azureenv.xml' -destEnvFile 'C:\temp\azure\azureenv.xml'</_Cmd>
       <_Cmd>$(_Cmd) }&quot;</_Cmd>
       <_Cmd Condition=" '$(CreateNonExistingObjects)'=='true' ">$(_Cmd) -CreateNonExistingObjects</_Cmd>
@@ -33,20 +34,25 @@
   <Target Name="UpdateAzureInfoInBin">
     <PropertyGroup>
       <_SourceFileFullPath>$([System.IO.Path]::GetFullPath($(SourceAzureConfig)))</_SourceFileFullPath>
-      <_DestFileFullPath>$([System.IO.Path]::GetFullPath($(DestAzureConfig)))</_DestFileFullPath>
+      <_DestFileFullPath>$([System.IO.Path]::GetFullPath($(DestAzureConfig)))</_DestFileFullPath>           
     </PropertyGroup>
 
     <Message Text="_SourceFileFullPath : [$(_SourceFileFullPath)]" Importance="high"/>
     <Message Text="_DestFileFullPath : [$(_DestFileFullPath)]" Importance="high"/>
     
+    
+    
     <PropertyGroup>
-      <_Cmd>$(PowerShellExe) -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; {$(ScriptLocation) </_Cmd>
+      <_Cmd>$(PowerShellExe) -noprofile -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; {$(ScriptLocation) </_Cmd>
       <_Cmd>$(_Cmd) -sourceEnvFile '$(_SourceFileFullPath)' -destEnvFile '$(_DestFileFullPath)'</_Cmd>
       <_Cmd>$(_Cmd) }&quot;</_Cmd>
+      <_Cmd Condition=" '$(CreateNonExistingObjects)'=='true' ">$(_Cmd) -CreateNonExistingObjects</_Cmd>
     </PropertyGroup>
 
     <Message Text="PS Command: [$(_Cmd)]" Importance="high" />
 
-    <Exec Command="$(_Cmd)"/>
+    <Exec Command="$(_Cmd)" Condition="Exists('$(_SourceFileFullPath)')"/>
+    <Warning Text="Azure environments source file not found at [$(_SourceFileFullPath)]. Not generating output file [$(_DestFileFullPath)]"
+             Condition="!Exists('$(_SourceFileFullPath)')"/>
   </Target>
 </Project>
