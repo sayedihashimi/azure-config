@@ -13,7 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{444EFA97
 	ProjectSection(SolutionItems) = preProject
 		Azure\azure-env-setup.ps1 = Azure\azure-env-setup.ps1
 		Azure\azure.targets = Azure\azure.targets
-		Azure\azureenv.xml = Azure\azureenv.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C9C040AB-7CC8-4166-96A1-6FF00436EB67}"
@@ -21,6 +20,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C9C040
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Environments", "Environments", "{E73F1F48-204B-4188-B75D-CCCE159910F4}"
+	ProjectSection(SolutionItems) = preProject
+		Azure\Environments\local.xml = Azure\Environments\local.xml
+		Azure\Environments\prod.xml = Azure\Environments\prod.xml
 	EndProjectSection
 EndProject
 Global
@@ -48,5 +53,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E73F1F48-204B-4188-B75D-CCCE159910F4} = {444EFA97-BD9E-43E5-91D0-47B4D893D9B8}
 	EndGlobalSection
 EndGlobal

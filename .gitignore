@@ -11,6 +11,9 @@ csx/
 packages/
 BuildOutput/
 
+# CloudServices creates an rcf folder during build
+rcf/
+
 # Known files to ignore always #
 *.suo
 *.user

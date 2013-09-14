@@ -3,12 +3,14 @@
     [string]$sourceEnvFile,
 
     [Parameter(Mandatory = $true)]
-    [string]$destEnvFile
+    [string]$destEnvFile,
+
+    [string]$azurePowershellModulePath="C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1",
+
+    [switch]
+    $CreateNonExistingObjects
 )
 
-
-#TODO: make into a script parameter
-$azurePowershellModulePath = "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
 Import-Module $azurePowershellModulePath
 
 # set this after importing the module
@@ -16,6 +18,7 @@ $VerbosePreference = "Continue"
 
 $defaultSubName = 'local'
 $defaultLocalDbServerName = '(LocalDb)\v11.0'
+$defaultStorageLocation = 'West US'
 
 # TODO: GAP: We cannot get the SQL Database password, need to update the APIs to expose it or
 #            or some better runtime support for getting the password somehow
@@ -61,8 +64,6 @@ function Get-SQLAzureDatabaseConnectionString
     }
 
     return $conString
-
-# Data Source=(LocalDb)\v11.0;Initial Catalog=;Integrated Security=SSPI
 }
 
 function GetStorageConnectionString() {
@@ -81,7 +82,7 @@ function GetStorageConnectionString() {
         Set-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
 
         $storageKey = Get-AzureStorageKey -StorageAccountName $storageAccountName
-
+        
         if($storageKey){
             # format of the con string: DefaultEndpointsProtocol=https;AccountName=<name>;AccountKey=<key>
             $accessKey = $null
@@ -103,6 +104,7 @@ function GetStorageConnectionString() {
 
     return $conString
 }
+
 function GetSubscriptionValueForNode(){
     param([System.Xml.XmlElement]$xmlNode)
     # does the node have  a SubscriptionName attribute?
@@ -116,6 +118,65 @@ function GetSubscriptionValueForNode(){
     }
 
     return $subName
+}
+
+function Detect-IPAddress
+{
+    $ipregex = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+    $text = Invoke-RestMethod 'http://www.whatismyip.com/api/wimi.php'
+    $result = $null
+
+    If($text -match $ipregex)
+    {
+        $ipaddress = $matches[0]
+        $ipparts = $ipaddress.Split('.')
+        $ipparts[3] = 0
+        $startip = [string]::Join('.',$ipparts)
+        $ipparts[3] = 255
+        $endip = [string]::Join('.',$ipparts)
+
+        $result = @{StartIPAddress = $startip; EndIPAddress = $endip}
+    }
+
+    return $result
+}
+
+if($CreateNonExistingObjects){
+
+    $currentSubscription = Get-AzureSubscription -Current
+
+    "Creating non-existing object in environment" | WriteDebugMessage
+    foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
+        $subName = GetSubscriptionValueForNode -xmlNode $node
+        $subNode = $configXml.AzureConfiguration.Subscriptions.Subscription | Where-Object {$_.Name -eq $subName}
+        $subId = $subNode.Id
+
+        if($subName -eq 'local'){
+            # create local resources here
+            # TODO: What needs to be done here?
+        }
+        else{
+            if($subId -ne $currentSubscription.SubscriptionId){                
+                $azSub = Get-AzureSubscription | Where-Object {$_.SubscriptionId -eq $subNode.Id}
+                Set-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
+            }
+
+            if($node.LocalName -eq 'StorageAccount'){
+                # if the storage account doesn't exit create it
+                Get-AzureStorageAccount -StorageAccountName $node.Name | Out-Null
+                if(!($?)){
+                    "Creating storage account [{0}]" -f $node.Name | WriteDebugMessage
+                    $newStorageAcct = (New-AzureStorageAccount -StorageAccountName $node.Name -Location $defaultStorageLocation)
+                    "Done creating storage account" | WriteDebugMessage
+                }
+            }
+            elseif($node.LocalName -eq 'SqlDatabase'){
+                # see if the db server exists or not
+                $dbServer = (Get-AzureSqlDatabaseServer | Where-Object {$_.ServerName -eq $node.ServerName })
+                "what happened" | WriteDebugMessage
+            }
+        }
+    }
 }
 
 # Find all StorageAccount elements under Environments and then populate the connection string
