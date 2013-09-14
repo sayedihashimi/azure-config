@@ -28,6 +28,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Env", "Env", "{E73F1F48-204
 		Azure\env\prod.xml = Azure\env\prod.xml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{1F69D235-90AA-4431-A886-49110B66DDE0}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\azure-config.nuspec = NuGet\azure-config.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{1CD3A80F-FC75-46A7-A1DE-C96F212BC993}"
+	ProjectSection(SolutionItems) = preProject
+		build.proj = build.proj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{7863534C-71B4-46FD-A71C-BD965B68EE15}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\content\local.xml = NuGet\content\local.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,5 +71,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E73F1F48-204B-4188-B75D-CCCE159910F4} = {444EFA97-BD9E-43E5-91D0-47B4D893D9B8}
+		{7863534C-71B4-46FD-A71C-BD965B68EE15} = {1F69D235-90AA-4431-A886-49110B66DDE0}
 	EndGlobalSection
 EndGlobal

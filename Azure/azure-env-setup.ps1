@@ -147,6 +147,10 @@ if($CreateNonExistingObjects){
 
     "Creating non-existing object in environment" | WriteDebugMessage
     foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
+        if(($node -is [System.Xml.XmlComment])){
+            continue
+        }
+
         $subName = GetSubscriptionValueForNode -xmlNode $node
         $subNode = $configXml.AzureConfiguration.Subscriptions.Subscription | Where-Object {$_.Name -eq $subName}
         $subId = $subNode.Id
@@ -181,6 +185,10 @@ if($CreateNonExistingObjects){
 
 # Find all StorageAccount elements under Environments and then populate the connection string
 foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
+    if(($node -is [System.Xml.XmlComment])){
+        continue
+    }
+
     $subName = GetSubscriptionValueForNode -xmlNode $node
     
     # see if the node has a ConnectionString element if it does skip over it

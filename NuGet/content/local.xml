@@ -1,0 +1,38 @@
+<!-- 
+    Azure related configuration will be placed in this file.
+    Currently it just supports StorageAccount and SQL db
+    -->
+<AzureConfiguration>
+  <Subscriptions>   
+    <!--
+    Here is where you define all the subscriptions that resources will belong  in.
+    You can use resources from many different subscriptions.
+
+    There is an implicit subscription named 'local' which points to the emulator.
+    You can override that by defining the 'local' subscription here if you like.
+    -->
+    
+    <!-- Here is how you can define one or more subscriptions
+    <Subscription Name="local"
+                   Id="21e74a87-523d-4a15-87e9-8c5eb2df7716" />
+    <Subscription Name="prod"
+                   Id="21e74a87-523d-4a15-87e9-8c5eb2df7716" />
+    <Subscription Name="test"
+                   Id="4BB7DC43-77F9-4079-8173-14D792B48E0C" />
+    -->
+  </Subscriptions>
+    
+  <!-- 
+  Define your environment below.
+    Note: you can set the default subscription with the DefaultSubscriptionName attribute on Environment. 
+  -->
+  <Environment Name="local">    
+    
+    <!--<StorageAccount Name="namehere" />
+    <StorageAccount Name="sayedtest" SubscriptionName="prod"/>
+    <StorageAccount Name="sayedtest2" SubscriptionName="prod" ConnectionString="(value here should not be modified)"/>
+    <SqlDatabase Name="sayeddb" ServerName="w9cjkvd9ay" />
+    <SqlDatabase Name="sayeddbtest" ServerName="w9cjkvd9ay" />-->
+    
+  </Environment>
+</AzureConfiguration>
