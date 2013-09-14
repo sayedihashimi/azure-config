@@ -1,15 +1,44 @@
 ﻿namespace Shared {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using System.Web.Hosting;
     using System.Xml.Linq;
 
     public class AzureConfig {
         private string ConfigXmlPath { get; set; }
         private XDocument ConfigXml { get; set; }
         private string DefaultEnvironmentName { get; set; }
+
+        /// <summary>
+        /// Creates a new instance of AzureConfig based on convention.
+        /// envName will be taken from the appSetting "azure:env".
+        /// configXmlPath will be based on the environment and the directory of the assembly
+        /// containing this class.
+        /// </summary>
+        public AzureConfig() {
+            string envName = this.GetEnvironmentName();
+            
+            if (string.IsNullOrEmpty(envName)) {
+                throw new ApplicationException("Missing required config value for 'azure:env'");
+            }
+                        
+            string configXmlPath = Path.Combine(
+                HostingEnvironment.MapPath("~/bin/"),
+                string.Format("{0}.xml", envName));
+
+            if (!File.Exists(configXmlPath)) {
+                throw new FileNotFoundException(
+                    "Configuration file not found", configXmlPath);
+            }
+
+            this.DefaultEnvironmentName = envName;
+            this.LoadConfig(configXmlPath);
+        }
 
         public AzureConfig(string configXmlPath, string envName) {
             if (string.IsNullOrEmpty(configXmlPath)) { throw new ArgumentNullException("configXmlPath"); }
@@ -71,6 +100,15 @@
             }
             
             return conString;
+        }
+
+        internal string GetEnvironmentName() {
+            string envName = ConfigurationManager.AppSettings["azure:env"];
+            if (string.IsNullOrEmpty(envName)) {
+                envName = "local";
+            }
+
+            return envName;
         }
     }
 }

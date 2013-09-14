@@ -348,6 +348,6 @@
   <PropertyGroup>
     <AzureConfigTargets Condition=" '$()'=='' ">$(MSBuildProjectDirectory)\..\Azure\azure.targets</AzureConfigTargets>
   </PropertyGroup>
-  <Import Project="$(AzureConfigTargets)" Condition="Exists('$(AzureConfigTargets)')" />
+  <!--<Import Project="$(AzureConfigTargets)" Condition="Exists('$(AzureConfigTargets)')" />-->
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

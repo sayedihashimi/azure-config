@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="CreateNugetPackage">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="FullBuild">
 
   <!-- 
   You can use this scrip to:
@@ -36,9 +36,12 @@
     <ContentItems Include="$(SourceRoot)NuGet\content\**\*">
       <DestDir>Azure\%(RecursiveDir)</DestDir>
     </ContentItems>
+
     <ContentItems Include="$(SourceRoot)Azure\azure-env-setup.ps1">
       <DestDir>Azure\</DestDir>
     </ContentItems>
+
+    <LibItems Include="$(OutputRoot)shared.dll" />
 
     <!--<NuGetRootItems Include="$(SourceRoot)readme.txt"/>-->
 
@@ -47,6 +50,7 @@
 
   <PropertyGroup>
     <FullBuildDependsOn>
+      CleanAndInitalize;
       BuildProjects;
       CreateNugetPackage;
     </FullBuildDependsOn>
@@ -55,14 +59,20 @@
     </BuildProjectsDependsOn>
   </PropertyGroup>
 
-  <Target Name="BuildProjects" DependsOnTargets=""/>
+  <Target Name="FullBuild" DependsOnTargets="$(FullBuildDependsOn)">
+    <Message Text="FullBuildDependsOn: $(FullBuildDependsOn)" Importance="high"/>
+    <Message Text="CreateNugetPackageDependsOn: $(CreateNugetPackageDependsOn)" Importance="high"/>
+  </Target>
+
+  <Target Name="BuildProjects" DependsOnTargets="CoreBuildProjects"/>
   <Target Name="CoreBuildProjects">
+    <Message Text="Building projects now [@(ProjectsToBuild)]" Importance="high"/>
     <MSBuild Projects="@(ProjectsToBuild)" Properties="Configuration=$(Configuration);OutputPath=$(OutputRoot)"/>
   </Target>
   
   <PropertyGroup>
-    <CreateNugetPackageDependsOn>
-      CleanAndInitalize;
+    <CreateNugetPackageDependsOn>      
+      BuildProjects;
       PrepareAndPopulateNugetFolder;
       CoreCreateNugetPackage;
     </CreateNugetPackageDependsOn>
@@ -99,7 +109,6 @@
 
     <Copy SourceFiles="@(ContentItems)"
           DestinationFiles="@(ContentItems->'$(PackageRoot)content\%(DestDir)%(Filename)%(Extension)')"/>
-    
     <Copy SourceFiles="@(LibItems)"
           DestinationFiles="@(LibItems->'$(PackageRoot)lib\%(DestDir)%(Filename)%(Extension)')"/>
     
