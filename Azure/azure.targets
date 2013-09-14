@@ -6,6 +6,8 @@
     <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">$(MSBuildThisFileDirectory)azure-env-setup.ps1</ScriptLocation>
     <SourceAzureConfig Condition=" '$(SourceAzureConfig)'=='' ">$(MSBuildThisFileDirectory)azureenv.xml</SourceAzureConfig>
     <DestAzureConfig Condition=" ''=='' ">$(OutDir)azureenv.xml</DestAzureConfig>
+    <!-- TODO: This should be updated to false later -->
+    <CreateNonExistingObjects Condition=" ''=='' ">true</CreateNonExistingObjects>
   </PropertyGroup>
   
   <Target Name="Demo">
@@ -13,6 +15,7 @@
       <_Cmd>$(PowerShellExe) -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; {$(ScriptLocation) </_Cmd>
       <_Cmd>$(_Cmd) -sourceEnvFile 'C:\Data\Dropbox\Microsoft\Hummingbird\Samples\WorkerAndQueue\Azure\azureenv.xml' -destEnvFile 'C:\temp\azure\azureenv.xml'</_Cmd>
       <_Cmd>$(_Cmd) }&quot;</_Cmd>
+      <_Cmd Condition=" '$(CreateNonExistingObjects)'=='true' ">$(_Cmd) -CreateNonExistingObjects</_Cmd>
     </PropertyGroup>
 
     <Message Text="PS Command: [$(_Cmd)]" Importance="high" />
