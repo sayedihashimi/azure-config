@@ -12,9 +12,9 @@
   </Subscriptions>
   
   <Environment Name="local" DefaultSubscriptionName="prod">
-    <StorageAccount Name="hummingbird3" />
-    <StorageAccount Name="sayedtest" SubscriptionName="prod"/>
-    <StorageAccount Name="sayedtest2" SubscriptionName="prod" ConnectionString="(value here should not be modified)"/>
+    <StorageAccount Name="name1" />
+    <StorageAccount Name="name2" SubscriptionName="prod"/>
+    <StorageAccount Name="nam3" SubscriptionName="prod" ConnectionString="(value here should not be modified)"/>
     <SqlDatabase Name="sayeddb" ServerName="w9cjkvd9ay" />
     <SqlDatabase Name="sayeddbtest" ServerName="w9cjkvd9ay" />
   </Environment>

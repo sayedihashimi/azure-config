@@ -68,7 +68,8 @@ function Get-SQLAzureDatabaseConnectionString
 
 function GetStorageConnectionString() {
     param([string] $subscriptionName,
-          [string] $storageAccountName)
+          [string] $storageAccountName,
+          [string] $envName)
     # get the subscription id
     $subNode = $configXml.AzureConfiguration.Subscriptions.Subscription | Where-Object {$_.Name -eq $subscriptionName}
     $subId = $subNode.Id
@@ -81,6 +82,7 @@ function GetStorageConnectionString() {
         $azSub = Get-AzureSubscription | Where-Object {$_.SubscriptionId -eq $subNode.Id}
         Set-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
 
+        $fullStorageName = GetFullStorageAccountName -baseName $storageAccountName -subId $subId -envName $envName
         $storageKey = Get-AzureStorageKey -StorageAccountName $storageAccountName
         
         if($storageKey){
@@ -91,7 +93,6 @@ function GetStorageConnectionString() {
 
             $conString = ("DefaultEndpointsProtocol={0};AccountName={1};AccountKey={2}" -f $storageDefaultProtocol, $storageKey.StorageAccountName, $accessKey)
             "Storage connection string: [{0}]" -f $conString | WriteDebugMessage | Out-Null
-
         }
         else{
             "Storage account key not found." |Write-Error
@@ -118,6 +119,24 @@ function GetSubscriptionValueForNode(){
     }
 
     return $subName
+}
+
+function GetFullStorageAccountName(){
+    param(
+        [string]$baseName,
+        [string]$subId,
+        [string]$envName
+    )
+
+    $storageName = (("{0}-{1}-{2}" -f $baseName, $subId.Substring(0,12), $envName).ToLower());
+    
+    # remove any non-alpha characters http://stackoverflow.com/questions/3114027/regex-expressions-for-all-non-alphanumeric-symbols
+    $storageName = ([System.Text.RegularExpressions.Regex]::Replace($storageName,"\W|_",""))
+    if($storageName.Length -gt 24){
+        $storageName = $storageName.Substring(0,24)
+    } #8C234E83-0A3B-44CE-90DE-ED9C9336BDF1
+
+    return $storageName
 }
 
 function Detect-IPAddress
@@ -151,6 +170,7 @@ if($CreateNonExistingObjects){
             continue
         }
 
+        $envName = $configXml.AzureConfiguration.Environment.Name
         $subName = GetSubscriptionValueForNode -xmlNode $node
         $subNode = $configXml.AzureConfiguration.Subscriptions.Subscription | Where-Object {$_.Name -eq $subName}
         $subId = $subNode.Id
@@ -167,10 +187,12 @@ if($CreateNonExistingObjects){
 
             if($node.LocalName -eq 'StorageAccount'){
                 # if the storage account doesn't exit create it
-                Get-AzureStorageAccount -StorageAccountName $node.Name | Out-Null
+                $storageName = GetFullStorageAccountName -baseName $node.Name -subId $subId -envName $envName
+                # Get-AzureStorageAccount -StorageAccountName $node.Name | Out-Null
+                Get-AzureStorageAccount -StorageAccountName $storageName | Out-Null
                 if(!($?)){
-                    "Creating storage account [{0}]" -f $node.Name | WriteDebugMessage
-                    $newStorageAcct = (New-AzureStorageAccount -StorageAccountName $node.Name -Location $defaultStorageLocation)
+                    "Creating storage account [{0}]" -f $storageName | WriteDebugMessage
+                    $newStorageAcct = (New-AzureStorageAccount -StorageAccountName $storageName -Location $defaultStorageLocation)
                     "Done creating storage account" | WriteDebugMessage
                 }
             }
@@ -190,13 +212,17 @@ foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
     }
 
     $subName = GetSubscriptionValueForNode -xmlNode $node
+    $subId = $subNode.Id
+    $subName = GetSubscriptionValueForNode -xmlNode $node
     
     # see if the node has a ConnectionString element if it does skip over it
     if(!$node.ConnectionString){                     
         # get the connection string for the asset
         $conString = $null
+        $envName = $configXml.AzureConfiguration.Environment.Name
         if($node.LocalName -eq 'StorageAccount'){
-            $conString = GetStorageConnectionString -subscriptionName $subName -storageAccountName $node.Name
+            $storageKey = GetFullStorageAccountName -baseName $node.Name -subId $subId -envName $envName
+            $conString = GetStorageConnectionString -subscriptionName $subName -storageAccountName $storageKey
             # add the ConnectionString attribute to the element
             $node.SetAttribute('ConnectionString',$conString)
         }
