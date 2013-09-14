@@ -2,7 +2,7 @@
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Queue;
-    using Shared;
+    using AzureHelpers;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -19,7 +19,7 @@
         private AzureConfig AzureConfig;
 
         public OrdersController() {
-            this.AzureConfig = new Shared.AzureConfig();
+            this.AzureConfig = new AzureConfig();
 
             this.AzureConfig = new AzureConfig();
 

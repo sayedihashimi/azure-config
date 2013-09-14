@@ -41,7 +41,7 @@
       <DestDir>Azure\</DestDir>
     </ContentItems>
 
-    <LibItems Include="$(OutputRoot)shared.dll" />
+    <LibItems Include="$(OutputRoot)AzureHelpers.dll" />
 
     <!--<NuGetRootItems Include="$(SourceRoot)readme.txt"/>-->
 
@@ -59,10 +59,7 @@
     </BuildProjectsDependsOn>
   </PropertyGroup>
 
-  <Target Name="FullBuild" DependsOnTargets="$(FullBuildDependsOn)">
-    <Message Text="FullBuildDependsOn: $(FullBuildDependsOn)" Importance="high"/>
-    <Message Text="CreateNugetPackageDependsOn: $(CreateNugetPackageDependsOn)" Importance="high"/>
-  </Target>
+  <Target Name="FullBuild" DependsOnTargets="$(FullBuildDependsOn)" />
 
   <Target Name="BuildProjects" DependsOnTargets="CoreBuildProjects"/>
   <Target Name="CoreBuildProjects">

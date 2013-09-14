@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared {
+namespace AzureHelpers {
     //====================================================
     //| Downloaded From                                  |
     //| Visual C# Kicks - http://www.vcskicks.com/       |

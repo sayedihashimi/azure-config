@@ -1,4 +1,4 @@
-﻿namespace Shared
+﻿namespace AzureHelpers
 {
     using System;
     using System.Collections.Generic;
