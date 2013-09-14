@@ -6,9 +6,9 @@
     with using WA.com
     -->    
     <Subscription Name="prod"
-                   Id="21e74a87-523d-4a15-87e9-8c5eb2df7716" />
+                   Id="33552979-26bf-49ee-858c-a8d0da43cea5" />
     <Subscription Name="test"
-                   Id="4BB7DC43-77F9-4079-8173-14D792B48E0C" />
+                   Id="21e74a87-523d-4a15-87e9-8c5eb2df7716" />
   </Subscriptions>
   
   <Environment Name="local" DefaultSubscriptionName="prod">

@@ -79,8 +79,9 @@ function GetStorageConnectionString() {
     $conString = $null
     $storageKey = $null
     if($subscriptionName -ne 'local'){
-        $azSub = Get-AzureSubscription | Where-Object {$_.SubscriptionId -eq $subNode.Id}
-        Set-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
+        $azSub = (Get-AzureSubscription | Where-Object {$_.SubscriptionId -eq $subNode.Id})[0]
+        # Set-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
+        Select-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
 
         $fullStorageName = GetFullStorageAccountName -baseName $storageAccountName -subId $subId -envName $envName
         $storageKey = Get-AzureStorageKey -StorageAccountName $storageAccountName
@@ -162,6 +163,7 @@ function Detect-IPAddress
 
 if($CreateNonExistingObjects){
 
+
     $currentSubscription = Get-AzureSubscription -Current
 
     "Creating non-existing object in environment" | WriteDebugMessage
@@ -181,8 +183,9 @@ if($CreateNonExistingObjects){
         }
         else{
             if($subId -ne $currentSubscription.SubscriptionId){                
-                $azSub = Get-AzureSubscription | Where-Object {$_.SubscriptionId -eq $subNode.Id}
-                Set-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
+                $azSub = (Get-AzureSubscription | Where-Object {$_.SubscriptionId -eq $subNode.Id})[0]
+                # Set-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
+                Select-AzureSubscription -SubscriptionName $azSub.SubscriptionName | Out-Null
             }
 
             if($node.LocalName -eq 'StorageAccount'){
@@ -247,7 +250,8 @@ $configXml.Save($destEnvFile)
 
 # restore the original azure subscription
 if($currentAzureSubBefore){
-    Set-AzureSubscription -SubscriptionName $currentAzureSubBefore.SubscriptionName
+    # Set-AzureSubscription -SubscriptionName $currentAzureSubBefore.SubscriptionName
+    Select-AzureSubscription -SubscriptionName $currentAzureSubBefore.SubscriptionName | Out-Null
 }
 # TODO: Remove this later
 $VerbosePreference = "SilentlyContinue"
