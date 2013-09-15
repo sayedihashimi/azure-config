@@ -18,7 +18,7 @@
     <Subscription Name="test"
                    Id="4BB7DC43-77F9-4079-8173-14D792B48E0C" />
     -->
-    <Subscription Name="local"
+    <Subscription Name="dev"
                    Id="21e74a87-523d-4a15-87e9-8c5eb2df7716" />
   </Subscriptions>
     
@@ -26,11 +26,11 @@
   Define your environment below.
     Note: you can set the default subscription with the DefaultSubscriptionName attribute on Environment. 
   -->
-  <Environment Name="local" DefaultSubscriptionName="local">    
+  <Environment Name="local" DefaultSubscriptionName="dev">    
     
     <!--<StorageAccount Name="name1" />
-    <StorageAccount Name="name2" SubscriptionName="prod"/>
-    <StorageAccount Name="name3" SubscriptionName="prod" ConnectionString="(value here should not be modified)"/>
+    <StorageAccount Name="name2" SubscriptionName="dev"/>
+    <StorageAccount Name="name3" SubscriptionName="dev" ConnectionString="(value here should not be modified)"/>
     <SqlDatabase Name="sayeddb" ServerName="w9cjkvd9ay" />
     <SqlDatabase Name="sayeddbtest" ServerName="w9cjkvd9ay" />-->
     

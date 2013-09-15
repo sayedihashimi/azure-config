@@ -124,10 +124,15 @@ function GetSubscriptionValueForNode(){
 
 function GetFullStorageAccountName(){
     param(
+        [Parameter(Mandatory=$true)]
         [string]$baseName,
+        [Parameter(Mandatory=$true)]
         [string]$subId,
+        [Parameter(Mandatory=$true)]
         [string]$envName
     )
+
+    
 
     $storageName = (("{0}-{1}-{2}" -f $baseName, $subId.Substring(0,12), $envName).ToLower());
     
@@ -215,8 +220,8 @@ foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
     }
 
     $subName = GetSubscriptionValueForNode -xmlNode $node
+    $subNode = $configXml.AzureConfiguration.Subscriptions.Subscription | Where-Object {$_.Name -eq $subName}
     $subId = $subNode.Id
-    $subName = GetSubscriptionValueForNode -xmlNode $node
     
     # see if the node has a ConnectionString element if it does skip over it
     if(!$node.ConnectionString){                     
@@ -225,7 +230,7 @@ foreach($node in $configXml.AzureConfiguration.Environment.ChildNodes){
         $envName = $configXml.AzureConfiguration.Environment.Name
         if($node.LocalName -eq 'StorageAccount'){
             $storageKey = GetFullStorageAccountName -baseName $node.Name -subId $subId -envName $envName
-            $conString = GetStorageConnectionString -subscriptionName $subName -storageAccountName $storageKey
+            $conString = GetStorageConnectionString -subscriptionName $subName -storageAccountName $storageKey -envName $envName
             # add the ConnectionString attribute to the element
             $node.SetAttribute('ConnectionString',$conString)
         }
