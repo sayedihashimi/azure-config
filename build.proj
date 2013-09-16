@@ -33,6 +33,9 @@
      <ToolsItems Include="$(SourceRoot)WebTemplatePack\Build\ligershark.vstemplates.targets" /> 
     <ToolsItems Include="$(SourceRoot)WebTemplatePack\Build\Lib\**\*" /> -->
 
+    <ToolsItems Include="$(SourceRoot)NuGet\tools\**\*" />
+    <ToolsItems Include="$(SourceRoot)Azure\azure-env-setup.ps1;$(SourceRoot)Azure\azure-helpers.psm1" />
+
     <ContentItems Include="$(SourceRoot)NuGet\content\**\*">
       <DestDir>Azure\%(RecursiveDir)</DestDir>
     </ContentItems>

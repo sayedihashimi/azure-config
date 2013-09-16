@@ -207,7 +207,7 @@ function UpdateFileWithEndpointInfo(){
     "Saving config file with the updated contents at [{0}]" -f $destEnvFile | WriteDebugMessage
     $configXml.Save($destEnvFile)
 }
-function CreateNonExistingObjects(){
+function AzureCreateNonExistingObjects(){
     param(
         [Parameter(Mandatory=$true)]
         [xml]
@@ -280,20 +280,6 @@ function GetAzureConfigFileForProject(){
     )
 
     $subPath = ("Azure\{0}.xml" -f $envName)
-    $result = (Join-Path -Path (GetProjDirectory) -ChildPath $subPath)
-    return $result
-}
-
-function GetAzureConfigFileForProject(){
-    param(
-        [Parameter(Mandatory=$true)]
-        [string]
-        $projectName,
-        [string]
-        $envName = 'local'
-    )
-
-    $subPath = ("Azure\{0}.xml" -f $envName)
     $result = (Join-Path -Path (GetProjDirectory 'WebApplication4') -ChildPath $subPath)
     return $result
 }
@@ -336,7 +322,7 @@ function GetProjectAzureOutputFile(){
 # This function will look in the local.xml file to see if there is an existing storage acct with the given name
 # if not then it will be added to the file and then the local.xml file
 # next time the cmd is executed to insert con strings this will be picked up
-function AddStorageAcctToProject(){
+function AzureAddStorageAcctToProject(){
     param(
         $project = (Get-Project),
         
@@ -370,7 +356,7 @@ function AddStorageAcctToProject(){
     $configXml.Save($configXmlPath)
 }
 
-function UpdateAzureProjectInfo(){
+function AzureUpdateProjectOutputFile(){
     param(
         $project = (Get-Project),
 
@@ -399,7 +385,7 @@ function UpdateAzureProjectInfo(){
 
     if($CreateNonExistingObjects){
         "Calling CreateNonExistingObjects" | Write-Host
-        CreateNonExistingObjects -configXml $configXml
+        AzureCreateNonExistingObjects -configXml $configXml
     }
 
     UpdateFileWithEndpointInfo -configXml $configXml -destEnvFile $destEnvFile
@@ -413,4 +399,4 @@ function UpdateAzureProjectInfo(){
 
 # Set-Alias Update-AzureProjFile UpdateFileWithEndpointInfo
 
-Export-ModuleMember -function * -Alias *
+Export-ModuleMember -function AzureCreateNonExistingObjects,AzureUpdateProjectOutputFile, AzureAddStorageAcctToProject
