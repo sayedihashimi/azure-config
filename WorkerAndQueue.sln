@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{444EFA97-BD9E-43E5-91D0-47B4D893D9B8}"
 	ProjectSection(SolutionItems) = preProject
 		Azure\azure-env-setup.ps1 = Azure\azure-env-setup.ps1
+		Azure\azure-helpers.psm1 = Azure\azure-helpers.psm1
 		Azure\azure.targets = Azure\azure.targets
 	EndProjectSection
 EndProject
