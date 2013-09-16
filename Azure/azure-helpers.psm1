@@ -1,5 +1,6 @@
 
 $defaultSubName = 'local'
+$defaultEnvName = 'local'
 $defaultLocalDbServerName = '(LocalDb)\v11.0'
 $defaultStorageLocation = 'West US'
 
@@ -258,7 +259,9 @@ function AzureCreateNonExistingObjects(){
     }
 }
 
+#########################################################
 # Functions related to the VS project
+#########################################################
 function GetProjDirectory(){
     param(
         [Parameter(Mandatory=$true)]
@@ -270,13 +273,67 @@ function GetProjDirectory(){
     return (get-item ($proj.FullName)).Directory.FullName
 }
 
+function GetProjectAzureEnvFolder(){
+    param(
+        $project = (Get-Project)
+    )
+    $subPath = ("Azure\" -f $envName)
+
+    $azureEnvFolder = (Join-Path -Path (((get-item $project.FileName).Directory).FullName) -ChildPath $subPath)
+
+    return $azureEnvFolder
+}
+
+function AzureListEnvironments(){
+    param(
+        $project = (Get-Project)
+    )
+
+    # look in the Azure folder for all .xml files and return the names
+
+    $azureEnvFolder = (GetProjectAzureEnvFolder -project $project)
+    $envNames = (Get-ChildItem $azureEnvFolder *.xml | ForEach-Object {$_.BaseName})
+    return $envNames
+}
+
+function AzureAddEnvironment(){
+    param(
+        $project = (Get-Project),
+
+        [Parameter(Mandatory = $true)]
+        [string]
+        $newEnvName,
+
+        $envTemplateName = $defaultEnvName
+    )
+
+    # copy the env template to the new environment location and then return
+    $azureEnvFolder = (GetProjectAzureEnvFolder -project $project)
+    $newEnvFilePath = Join-Path $azureEnvFolder -ChildPath ("{0}.xml" -f $newEnvName)
+
+    if(!(Test-Path $newEnvFilePath)){
+        $envTemplateFilePath = Join-Path $azureEnvFolder -ChildPath ("{0}.xml" -f $envTemplateName)
+        if(!(Test-Path $envTemplateFilePath)){
+            "Unable to find env template file at [{0}]" -f $envTemplateName | Write-Error
+            return
+        }
+
+        Copy-Item $envTemplateFilePath $newEnvFilePath
+        # now add the file to the given project
+        $project.ProjectItems.AddFromFile($newEnvFilePath) | Out-Null
+        "`t{0}.xml has been added to your project" -f $newEnvName | Write-Host
+        # open up the new file in the editor
+        $dte.ItemOperations.OpenFile($newEnvFilePath) | Out-Null
+    }
+}
+
 function GetAzureConfigFileForProject(){
     param(
         [Parameter(Mandatory=$true)]
         [string]
         $projectName,
         [string]
-        $envName = 'local'
+        $envName = $defaultEnvName 
     )
 
     $subPath = ("Azure\{0}.xml" -f $envName)
@@ -312,7 +369,7 @@ function GetProjectAzureOutputFile(){
         $project = (Get-Project),
         
         [string]
-        $envName = 'local'
+        $envName = $defaultEnvName 
     )
 
     return ("{0}{1}.xml" -f (GetOutputPathForProject), $envName)    
@@ -330,7 +387,7 @@ function AzureAddStorageAcctToProject(){
         $storageAcctName,
 
         [string]
-        $envName = 'local',
+        $envName = $defaultEnvName,
         # the name of the subscription that should be used, these are names from local.xml
         [string]
         $subName = 'dev'
@@ -367,7 +424,7 @@ function AzureUpdateProjectOutputFile(){
         $project = (Get-Project),
 
         [string]
-        $envName = 'local',
+        $envName = $defaultEnvName,
 
         $sourceEnvFile,
         $destEnvFile,
@@ -405,6 +462,6 @@ function AzureUpdateProjectOutputFile(){
 
 # Set-Alias Update-AzureProjFile UpdateFileWithEndpointInfo
 
-Export-ModuleMember -function AzureCreateNonExistingObjects,AzureUpdateProjectOutputFile, AzureAddStorageAcctToProject
+Export-ModuleMember -function Azure*
 
-# Export-ModuleMember -function *
+Export-ModuleMember -function *
