@@ -407,4 +407,4 @@ function AzureUpdateProjectOutputFile(){
 
 Export-ModuleMember -function AzureCreateNonExistingObjects,AzureUpdateProjectOutputFile, AzureAddStorageAcctToProject
 
-Export-ModuleMember -function *
+# Export-ModuleMember -function *
