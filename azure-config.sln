@@ -1,12 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "WorkerAndQueue", "WorkerAndQueue\WorkerAndQueue.ccproj", "{4FE43627-BDE6-4A5B-B00D-C36EF12C459A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerRole1", "WorkerRole1\WorkerRole1.csproj", "{692C4706-C4BC-4B44-B4B7-F21FF0C15525}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWebApi", "MyWebApi\MyWebApi.csproj", "{75A4603F-604A-4267-9FB0-AB1EE76C6C1F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{444EFA97-BD9E-43E5-91D0-47B4D893D9B8}"
 	ProjectSection(SolutionItems) = preProject
 		Azure\azure-env-setup.ps1 = Azure\azure-env-setup.ps1
@@ -50,18 +44,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4FE43627-BDE6-4A5B-B00D-C36EF12C459A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FE43627-BDE6-4A5B-B00D-C36EF12C459A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4FE43627-BDE6-4A5B-B00D-C36EF12C459A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4FE43627-BDE6-4A5B-B00D-C36EF12C459A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{692C4706-C4BC-4B44-B4B7-F21FF0C15525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{692C4706-C4BC-4B44-B4B7-F21FF0C15525}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{692C4706-C4BC-4B44-B4B7-F21FF0C15525}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{692C4706-C4BC-4B44-B4B7-F21FF0C15525}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75A4603F-604A-4267-9FB0-AB1EE76C6C1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75A4603F-604A-4267-9FB0-AB1EE76C6C1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75A4603F-604A-4267-9FB0-AB1EE76C6C1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75A4603F-604A-4267-9FB0-AB1EE76C6C1F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{45BF5EB3-E667-4BB0-A47A-86889C37D834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{45BF5EB3-E667-4BB0-A47A-86889C37D834}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45BF5EB3-E667-4BB0-A47A-86889C37D834}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -284,6 +284,25 @@ function GetProjectAzureEnvFolder(){
     return $azureEnvFolder
 }
 
+function AzureOpenEnvFile(){
+    param(
+        $project = (Get-Project),
+        [string]
+        $envName = $defaultEnvName
+    )
+
+    $azureEnvFolder = (GetProjectAzureEnvFolder -project $project)
+    $envFilePath = Join-Path $azureEnvFolder -ChildPath ("{0}.xml" -f $envName)
+
+    if((Test-Path $envFilePath)){
+        "`tOpening Azure env file [{0}]" -f $envFilePath | Write-Warning    
+        $dte.ItemOperations.OpenFile($envFilePath) | Out-Null
+    }
+    else{
+        "`tCould not find environment [{0}]. File not found at [{1}]" -f $envName, $envFilePath | Write-Host
+    }    
+}
+
 function AzureListEnvironments(){
     param(
         $project = (Get-Project)
@@ -478,4 +497,4 @@ function AzureUpdateProjectOutputFile(){
 
 Export-ModuleMember -function Azure*
 
-Export-ModuleMember -function *
+#Export-ModuleMember -function *
