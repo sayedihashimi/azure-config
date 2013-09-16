@@ -37,10 +37,11 @@
       <DestDir>Azure\%(RecursiveDir)</DestDir>
     </ContentItems>
 
-    <ContentItems Include="$(SourceRoot)Azure\azure-env-setup.ps1">
+    <ContentItems Include="$(SourceRoot)Azure\azure-env-setup.ps1;$(SourceRoot)Azure\azure-helpers.psm1">
       <DestDir>Azure\</DestDir>
     </ContentItems>
-
+    
+    
     <LibItems Include="$(OutputRoot)AzureHelpers.dll" />
 
     <!--<NuGetRootItems Include="$(SourceRoot)readme.txt"/>-->
