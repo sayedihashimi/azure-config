@@ -280,7 +280,8 @@ function GetAzureConfigFileForProject(){
     )
 
     $subPath = ("Azure\{0}.xml" -f $envName)
-    $result = (Join-Path -Path (GetProjDirectory 'WebApplication4') -ChildPath $subPath)
+
+    $result = (Join-Path -Path (((get-item $project.FileName).Directory).FullName) -ChildPath $subPath)
     return $result
 }
 
@@ -290,15 +291,13 @@ function GetOutputPathForProject(){
     )
 
     $outputPathForProj = ($project.ConfigurationManager.ActiveConfiguration.Properties.Item("OutputPath").Value.ToString())
+    
     # resolve it to a full path
     $oldLoc = Get-Location
-    
-    Set-Location ((get-item $project.FileName).DirectoryName)
-    
+    Set-Location (((get-item $project.FileName).Directory).FullName)
     $fullPathToOutputFolder = (Resolve-Path $outputPathForProj).ToString()
-
     Set-Location $oldLoc
-
+    
     # make sure the path ends with a \ before returning to the caller
     $fulPathToOutputFolder = $fullPathToOutputFolder.Trim()
     if(!$fullPathToOutputFolder.EndsWith('\')){
@@ -337,7 +336,14 @@ function AzureAddStorageAcctToProject(){
         $subName = 'dev'
     )
 
-    $configXmlPath = (GetAzureConfigFileForProject -projectName $project -envName $envName)
+    $configXmlPath = (GetAzureConfigFileForProject -projectName $project.Name -envName $envName)
+
+    # convert it to a full path
+    $oldLoc = Get-Location
+    Set-Location (((get-item $project.FileName).Directory).Parent.FullName)
+    $configXmlPath = (Resolve-Path $configXmlPath)
+    Set-Location $oldLoc
+
     [xml]$configXml = Get-Content $configXmlPath
     # inspect the xml file to see if there is already an existing element with that name
     
@@ -400,3 +406,5 @@ function AzureUpdateProjectOutputFile(){
 # Set-Alias Update-AzureProjFile UpdateFileWithEndpointInfo
 
 Export-ModuleMember -function AzureCreateNonExistingObjects,AzureUpdateProjectOutputFile, AzureAddStorageAcctToProject
+
+Export-ModuleMember -function *
