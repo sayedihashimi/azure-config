@@ -387,36 +387,50 @@ function AzureAddStorageAcctToProject(){
         $storageAcctName,
 
         [string]
-        $envName = $defaultEnvName,
+        $envName,
         # the name of the subscription that should be used, these are names from local.xml
         [string]
         $subName = 'dev'
     )
-
-    $configXmlPath = (GetAzureConfigFileForProject -projectName $project.Name -envName $envName)
-
-    # convert it to a full path
-    $oldLoc = Get-Location
-    Set-Location (((get-item $project.FileName).Directory).Parent.FullName)
-    $configXmlPath = (Resolve-Path $configXmlPath)
-    Set-Location $oldLoc
-
-    [xml]$configXml = Get-Content $configXmlPath
-    # inspect the xml file to see if there is already an existing element with that name
     
-    $element = ($configXml.AzureConfiguration.Environment.ChildNodes | Where-Object {$_.LocalName -eq 'StorageAccount' -and $_.Name -eq $storageAcctName})
-    if($element){
-        "`tStorageAccount [{0}] already defined in env file [{1}]" -f $storageAcctName, $envName | Write-Host
-        # item already exists
-        return;
+    $envNamesToEdit = @()
+    if($envName){
+        $envNamesToEdit+=$envName
+    }
+    else{
+        # edit all the environments
+        $envNamesToEdit += (AzureListEnvironments)
     }
 
-    # let's add the new element now
-    $newElement = $configXml.CreateElement('StorageAccount')
-    $newElement.SetAttribute('Name',$storageAcctName)
-    $newElement.SetAttribute('SubscriptionName',$subName)
-    $configXml.AzureConfiguration.Environment.AppendChild($newElement)
-    $configXml.Save($configXmlPath)
+    foreach($envNameToEdit in $envNamesToEdit){
+        $configXmlPath = (GetAzureConfigFileForProject -projectName $project.Name -envName $envNameToEdit)
+
+        # convert it to a full path
+        $oldLoc = Get-Location
+        Set-Location (((get-item $project.FileName).Directory).Parent.FullName)
+        $configXmlPath = (Resolve-Path $configXmlPath)
+        Set-Location $oldLoc
+
+        [xml]$configXml = Get-Content $configXmlPath
+        # inspect the xml file to see if there is already an existing element with that name
+    
+
+        $element = ($configXml.AzureConfiguration.Environment.ChildNodes | Where-Object {$_.LocalName -eq 'StorageAccount' -and $_.Name -eq $storageAcctName}) | Out-Null
+        if($element){
+            "`tStorageAccount [{0}] already defined in env file [{1}]" -f $storageAcctName, $envNameToEdit | Write-Host
+            # item already exists
+            return;
+        }
+
+        # let's add the new element now
+        $newElement = $configXml.CreateElement('StorageAccount')
+        $newElement.SetAttribute('Name',$storageAcctName)
+        $newElement.SetAttribute('SubscriptionName',$subName)
+        $configXml.AzureConfiguration.Environment.AppendChild($newElement) | Out-Null
+        $configXml.Save($configXmlPath) | Out-Null
+
+        "`tAdded storage account [{0}] to environment [{1}]" -f $storageAcctName, $envNameToEdit | Write-Host
+    }
 }
 
 function AzureUpdateProjectOutputFile(){
